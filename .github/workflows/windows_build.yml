@@ -1,0 +1,68 @@
+name: Windows Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+      - .gitignore
+      - .editorconfig
+      - appveyor.yml
+      - 'azure-pipelines*.yml'
+      - 'ci/azure-pipelines/template*.yml'
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - .gitignore
+      - .editorconfig
+      - appveyor.yml
+      - 'azure-pipelines*.yml'
+      - 'ci/azure-pipelines/template*.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~\AppData\Local\go-build
+            ~\go\pkg\mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: install wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: install webview2
+        run: choco install webview2-runtime
+
+      - name: nsis
+        run: choco install nsis
+
+      - name: build standalone
+        run: wails build -webview2 embed -u
+
+      - name: build installer
+        run: wails build -webview2 embed -u -nsis
+
+      - name: upload standalone
+        uses: actions/upload-artifact@v3
+        with:
+          name: reskey
+          path: build/bin/reskey.exe
+
+      - name: upload amd64 installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: reskey-amd64-installer
+          path: build/bin/reskey-amd64-installer.exe
