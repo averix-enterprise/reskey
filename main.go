@@ -2,7 +2,6 @@ package main
 
 import (
 	"embed"
-	"fmt"
 	"reskey/backend"
 
 	"github.com/wailsapp/wails/v2"
@@ -19,11 +18,6 @@ type Test struct {
 
 func main() {
 	app := &backend.App{}
-
-	var data interface{} = &Test{}
-	backend.LoadOrCreateFile("test.json", &data, Test{Name: "Maga"})
-	test := data.(*Test)
-	fmt.Println(test.Name)
 
 	backend.Initialize()
 

@@ -14,12 +14,12 @@ type Key struct {
 }
 
 type HotKey struct {
-	Id             string `json:"id"`
-	Width          uint32 `json:"width"`
-	Height         uint32 `json:"height"`
-	KeyInstance    Key
-	HotKeyInstance *hotkey.Hotkey
-	Running        bool
+	Id             string         `json:"id"`
+	Width          uint32         `json:"width"`
+	Height         uint32         `json:"height"`
+	KeyInstance    Key            `json:"-"`
+	HotKeyInstance *hotkey.Hotkey `json:"-"`
+	Running        bool           `json:"-"`
 }
 
 func registerKey(id string, windowsKey hotkey.Key) {
@@ -29,11 +29,24 @@ func registerKey(id string, windowsKey hotkey.Key) {
 func Initialize() {
 	registerKey("P", hotkey.KeyP)
 	registerKey("U", hotkey.KeyU)
-	registerHotKey("P", 1920, 1080)
-	registerHotKey("U", 1920, 1080)
+
+	loadHotKeysFromFile()
 }
 
-func registerHotKey(keyId string, width uint32, height uint32) {
+func loadHotKeysFromFile() {
+	var data map[string]HotKey
+	LoadOrCreateFile("hotkeys.json", &data, make(map[string]HotKey))
+	for _, value := range data {
+		hk := value
+		RegisterHotKey(hk.Id, hk.Width, hk.Height, false)
+	}
+}
+
+func saveHotKeysIntoFile() {
+	WriteToFile("hotkeys.json", RegisteredHotKeys)
+}
+
+func RegisterHotKey(keyId string, width uint32, height uint32, save bool) {
 	key, ok := RegisteredKeys[keyId]
 	if !ok {
 		panic("Cannot find key: " + keyId)
@@ -55,6 +68,9 @@ func registerHotKey(keyId string, width uint32, height uint32) {
 	if ok {
 		go run(&hotKey)
 	}
+	if save {
+		saveHotKeysIntoFile()
+	}
 }
 
 func run(hk *HotKey) {
@@ -64,7 +80,7 @@ func run(hk *HotKey) {
 	}
 }
 
-func unregisterHotKey(key string) {
+func UnregisterHotKey(key string) {
 	hotKey, ok := RegisteredHotKeys[key]
 	if !ok {
 		return
@@ -74,4 +90,5 @@ func unregisterHotKey(key string) {
 	if err != nil {
 		return
 	}
+	saveHotKeysIntoFile()
 }
