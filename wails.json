@@ -8,6 +8,8 @@
   "frontend:dev:serverUrl": "auto",
   "info": {
     "companyName": "Averix",
-    "productName": "ResKey"
+    "productName": "ResKey",
+    "copyright": "Copyright Averix 2023",
+    "productVersion": "0.0.1-alpha.1"
   }
 }
