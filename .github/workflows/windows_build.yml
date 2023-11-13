@@ -3,6 +3,8 @@ name: Windows Build
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     paths-ignore:
       - '**/*.md'
       - .gitignore
@@ -56,11 +58,11 @@ jobs:
       - name: upload standalone
         uses: actions/upload-artifact@v3
         with:
-          name: reskey.exe
+          name: reskey
           path: build/bin/reskey.exe
 
       - name: upload amd64 installer
         uses: actions/upload-artifact@v3
         with:
-          name: reskey-amd64-installer.exe
+          name: reskey-amd64-installer
           path: build/bin/reskey-amd64-installer.exe
