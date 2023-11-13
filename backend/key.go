@@ -18,8 +18,8 @@ type HotKey struct {
 	Width          uint32 `json:"width"`
 	Height         uint32 `json:"height"`
 	KeyInstance    Key
-	Channel        chan bool
 	HotKeyInstance *hotkey.Hotkey
+	Running        bool
 }
 
 func registerKey(id string, windowsKey hotkey.Key) {
@@ -30,7 +30,7 @@ func Initialize() {
 	registerKey("P", hotkey.KeyP)
 	registerKey("U", hotkey.KeyU)
 	registerHotKey("P", 1920, 1080)
-	registerHotKey("P", 1920, 1080)
+	registerHotKey("U", 1920, 1080)
 }
 
 func registerHotKey(keyId string, width uint32, height uint32) {
@@ -43,7 +43,7 @@ func registerHotKey(keyId string, width uint32, height uint32) {
 		Width:          width,
 		Height:         height,
 		KeyInstance:    key,
-		Channel:        make(chan bool),
+		Running:        true,
 		HotKeyInstance: hotkey.New([]hotkey.Modifier{}, key.WindowsKey),
 	}
 	RegisteredHotKeys[keyId] = hotKey
@@ -53,29 +53,25 @@ func registerHotKey(keyId string, width uint32, height uint32) {
 		return
 	}
 	if ok {
-		go func() {
-			for {
-				select {
-				case <-hotKey.Channel:
-					return
-				default:
-					<-hotKey.HotKeyInstance.Keydown()
-					fmt.Println("Working")
-				}
-			}
-		}()
+		go run(&hotKey)
+	}
+}
+
+func run(hk *HotKey) {
+	for hk.Running {
+		<-hk.HotKeyInstance.Keydown()
+		fmt.Printf("Exec: %s, Running: %t\n", hk.Id, hk.Running)
 	}
 }
 
 func unregisterHotKey(key string) {
 	hotKey, ok := RegisteredHotKeys[key]
 	if !ok {
-		panic("Cannot find hotkey: " + key)
+		return
 	}
-	hotKey.Channel <- true
+	hotKey.Running = false
 	err := hotKey.HotKeyInstance.Unregister()
 	if err != nil {
-		panic("Cannot unregister hotkey: " + key)
+		return
 	}
-
 }
