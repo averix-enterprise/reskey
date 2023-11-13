@@ -44,19 +44,23 @@ jobs:
       - name: install webview2
         run: choco install webview2-runtime
 
-        #- name: garble
-        #  run: go install mvdan.cc/garble@latest
+      - name: nsis
+        run: choco install nsis
 
-        #- name: nsis
-        # run: choco install nsis
+      - name: build standalone
+        run: wails build -webview2 embed -u
 
-        #- name: upx
-        #  run: choco install upx
+      - name: build installer
+        run: wails build -webview2 embed -u -nsis
 
-      - name: build
-        run: wails build -webview2 embed -u -debug
-
-      - uses: actions/upload-artifact@v3
+      - name: upload standalone
+        uses: actions/upload-artifact@v3
         with:
-          name: debug-${{ runner.os }}
-          path: build/bin/
+          name: reskey.exe
+          path: build/bin/reskey.exe
+
+      - name: upload amd64 installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: reskey-amd64-installer.exe
+          path: build/bin/reskey-amd64-installer.exe

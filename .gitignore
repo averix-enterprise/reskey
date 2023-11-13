@@ -3,3 +3,4 @@ node_modules
 frontend/dist
 .idea/
 test.json
+build/windows/installer/tmp
