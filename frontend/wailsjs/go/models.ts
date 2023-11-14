@@ -2,6 +2,8 @@ export namespace backend {
 	
 	export class HotKey {
 	    id: string;
+	    key: string;
+	    modifiers: string[];
 	    width: number;
 	    height: number;
 	
@@ -12,6 +14,8 @@ export namespace backend {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
+	        this.key = source["key"];
+	        this.modifiers = source["modifiers"];
 	        this.width = source["width"];
 	        this.height = source["height"];
 	    }

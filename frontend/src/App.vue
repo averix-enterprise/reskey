@@ -1,17 +1,30 @@
 <script lang="ts" setup>
-import { WindowSetSize } from "../wailsjs/runtime/runtime";
+import {LogInfo, WindowSetSize} from "../wailsjs/runtime";
 import Row from "./components/HotKey/HotKeyRow.vue"
-import { ref, watch } from "vue";
+import {onMounted, ref, watch} from "vue";
+import {backend} from "../wailsjs/go/models";
+import {AddHotKey, GetAllHotKeys} from "../wailsjs/go/backend/App";
 
 const rowAmount = ref(1)
 
-const addRow = () => {
-  rowAmount.value++
+const hotKeys = ref<Array<backend.HotKey>>([]);
+
+onMounted(async () => {
+  hotKeys.value = await GetAllHotKeys()
+})
+
+const addHotKey = async () => {
+  await AddHotKey()
+  await refreshHotKeys()
 }
 
-watch(rowAmount, (newValue) => {
+const refreshHotKeys = async () => {
+  hotKeys.value = await GetAllHotKeys()
+}
+
+watch(hotKeys, (newValue) => {
   const baseHeight = 250
-  const windowHeight = baseHeight + (rowAmount.value * 50 )
+  const windowHeight = baseHeight + (hotKeys.value.length * 50 )
   if (windowHeight <= 800) {
       WindowSetSize(600, windowHeight)
   }
@@ -25,15 +38,15 @@ watch(rowAmount, (newValue) => {
         <h1 class="text-lg font-bold text-center">
           Res<span class="text-purple-800">Key</span>
         </h1>
-        <button @click="addRow">+</button>
+        <button @click="addHotKey">+</button>
       </div>
       <div>
-        <button @click="rowAmount = 1">Refresh</button>
+        <button @click="refreshHotKeys">Refresh</button>
       </div>
     </div>
     <hr class="my-3" />
     <div class="flex flex-col gap-2">
-      <Row v-for="row in rowAmount" />
+      <Row v-for="hotkey in hotKeys" :key="hotkey.id" :hotkey="hotkey" :refresh-hot-keys="refreshHotKeys" />
     </div>
   </div>
 </template>
