@@ -26,3 +26,7 @@ To build a redistributable, production mode package, use wails build.
 
 - [ReaperMaga]('https://github.com/reapermaga')
 - [Zoey]('https://github.com/zoey-kaiser')
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.

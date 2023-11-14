@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func LoadOrCreateFile(path string, value *interface{}, defaultValue interface{}) {
+func LoadOrCreateFile(path string, value interface{}, defaultValue interface{}) {
 	if _, err := os.Stat(path); err == nil {
 		data, err := os.ReadFile(path)
 		checkFileError(err, "Could not read file: "+path)
@@ -21,6 +21,19 @@ func LoadOrCreateFile(path string, value *interface{}, defaultValue interface{})
 		checkFileError(err, "Could not write file")
 		err = file.Close()
 		checkFileError(err, "Could not close file")
+	}
+}
+
+func WriteToFile(path string, value interface{}) {
+	if _, err := os.Stat(path); err == nil {
+		file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+		checkFileError(err, "Cannot open file: "+path)
+		data, err := json.Marshal(value)
+		checkFileError(err, "Cannot convert object to json: "+path)
+		_, err = file.WriteString(string(data))
+		checkFileError(err, "Cannot write string to file: "+path)
+		err = file.Close()
+		checkFileError(err, "Cannot close file: "+path)
 	}
 }
 
