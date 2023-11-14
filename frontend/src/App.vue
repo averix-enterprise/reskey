@@ -37,4 +37,3 @@ watch(rowAmount, (newValue) => {
     </div>
   </div>
 </template>
-
