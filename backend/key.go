@@ -147,7 +147,19 @@ func ChangeKeys(id string, key string, modifiers []string) bool {
 	StopHotKey(&hk)
 	hk.Key = key
 	hk.Modifiers = modifiers
+	saveHotKeysIntoFile()
 	return StartHotKey(&hk)
+}
+
+func ChangeResolution(id string, width uint32, height uint32) bool {
+	hk, ok := RegisteredHotKeys[id]
+	if !ok {
+		return false
+	}
+	hk.Width = width
+	hk.Height = height
+	saveHotKeysIntoFile()
+	return true
 }
 
 func UnregisterHotKey(id string) bool {
