@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import {backend} from "../../../wailsjs/go/models";
-import HotKey = backend.HotKey;
-import {DeleteHotKey} from "../../../wailsjs/go/backend/App";
+import { useQueryClient } from '@tanstack/vue-query'
+import { backend } from "../../../wailsjs/go/models";
+import { DeleteHotKey } from "../../../wailsjs/go/backend/App";
 
-const props =defineProps<{hotkey: HotKey, refreshHotKeys: () => void}>()
+import HotKey = backend.HotKey;
+const props = defineProps<{hotkey: HotKey, refreshHotKeys: () => void}>()
+
+const queryClient = useQueryClient()
 
 const deleteHotKey = () => {
   DeleteHotKey(props.hotkey.id)
   props.refreshHotKeys()
+  queryClient.invalidateQueries({ queryKey: ['hotKeys'] })
 }
 </script>
 <template>
