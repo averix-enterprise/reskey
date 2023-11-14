@@ -22,9 +22,10 @@ func main() {
 	backend.Initialize()
 
 	err := wails.Run(&options.App{
-		Title:  "Resolution Key",
-		Width:  1024,
-		Height: 768,
+		Title:         "Resolution Key",
+		Width:         500,
+		Height:        250,
+		DisableResize: true,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
