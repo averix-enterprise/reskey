@@ -29,4 +29,4 @@ To build a redistributable, production mode package, use wails build.
 
 ## License
 
-Distribbuted under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
