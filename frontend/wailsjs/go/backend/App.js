@@ -6,14 +6,14 @@ export function AddHotKey() {
   return window['go']['backend']['App']['AddHotKey']();
 }
 
-export function ChangeHotKey(arg1, arg2, arg3) {
-  return window['go']['backend']['App']['ChangeHotKey'](arg1, arg2, arg3);
-}
-
 export function DeleteHotKey(arg1) {
   return window['go']['backend']['App']['DeleteHotKey'](arg1);
 }
 
 export function GetAllHotKeys() {
   return window['go']['backend']['App']['GetAllHotKeys']();
+}
+
+export function UpdateHotKey(arg1, arg2, arg3) {
+  return window['go']['backend']['App']['UpdateHotKey'](arg1, arg2, arg3);
 }

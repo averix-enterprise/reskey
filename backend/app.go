@@ -24,7 +24,7 @@ func (a *App) AddHotKey() bool {
 	return RegisterHotKey("None", make([]string, 0), 1920, 1080, true) != nil
 }
 
-func (a *App) ChangeHotKey(id string, key string, modifiers []string) bool {
+func (a *App) UpdateHotKey(id string, key string, modifiers []string) bool {
 	return ChangeKeys(id, key, modifiers)
 }
 

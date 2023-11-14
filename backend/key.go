@@ -157,6 +157,7 @@ func UnregisterHotKey(id string) bool {
 	}
 	StopHotKey(&hotKey)
 	delete(RegisteredHotKeys, id)
+	saveHotKeysIntoFile()
 	return true
 }
 

@@ -4,8 +4,8 @@ import {backend} from '../models';
 
 export function AddHotKey():Promise<boolean>;
 
-export function ChangeHotKey(arg1:string,arg2:string,arg3:Array<string>):Promise<boolean>;
-
 export function DeleteHotKey(arg1:string):Promise<boolean>;
 
 export function GetAllHotKeys():Promise<Array<backend.HotKey>>;
+
+export function UpdateHotKey(arg1:string,arg2:string,arg3:Array<string>):Promise<boolean>;
