@@ -12,10 +12,6 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
-type Test struct {
-	Name string `json:"name"`
-}
-
 func main() {
 	app := &backend.App{}
 
