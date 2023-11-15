@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"golang.design/x/hotkey"
 	"reflect"
+	"reskey/backend/resolution"
 )
 
 var RegisteredKeys = make(map[string]Key)
@@ -135,7 +136,8 @@ func RegisterHotKey(key string, modifiers []string, width uint32, height uint32,
 func run(hk *HotKey) {
 	for hk.Running {
 		<-hk.HotKeyInstance.Keydown()
-		fmt.Printf("Exec: %s, Running: %t\n", hk.Id, hk.Running)
+		resolution.ChangeRes(hk.Width, hk.Height)
+		fmt.Printf("Changed res to: %b-%b", hk.Width, hk.Height)
 	}
 }
 
@@ -177,6 +179,7 @@ func StopHotKey(hotKey *HotKey) bool {
 	if hotKey.Key == "None" {
 		return true
 	}
+	resolution.WaitRes(2)
 	hotKey.Running = false
 	err := hotKey.HotKeyInstance.Unregister()
 	if err != nil {
