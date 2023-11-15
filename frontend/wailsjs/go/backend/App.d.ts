@@ -8,6 +8,6 @@ export function DeleteHotKey(arg1:string):Promise<boolean>;
 
 export function GetAllHotKeys():Promise<Array<backend.HotKey>>;
 
-export function UpdateHotKeys(arg1:string,arg2:number,arg3:number,arg4:string,arg5:Array<string>):Promise<boolean>;
+export function UpdateHotKeys(arg1:string,arg2:string,arg3:Array<string>):Promise<boolean>;
 
 export function UpdateResolution(arg1:string,arg2:number,arg3:number):Promise<boolean>;

@@ -14,8 +14,8 @@ export function GetAllHotKeys() {
   return window['go']['backend']['App']['GetAllHotKeys']();
 }
 
-export function UpdateHotKeys(arg1, arg2, arg3, arg4, arg5) {
-  return window['go']['backend']['App']['UpdateHotKeys'](arg1, arg2, arg3, arg4, arg5);
+export function UpdateHotKeys(arg1, arg2, arg3) {
+  return window['go']['backend']['App']['UpdateHotKeys'](arg1, arg2, arg3);
 }
 
 export function UpdateResolution(arg1, arg2, arg3) {

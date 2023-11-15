@@ -126,6 +126,9 @@ func RegisterHotKey(key string, modifiers []string, width uint32, height uint32,
 		Modifiers: modifiers,
 		Key:       key,
 	}
+	if hotKey.Key != "None" {
+		StartHotKey(&hotKey)
+	}
 	RegisteredHotKeys[hotKey.Id] = hotKey
 	if save {
 		saveHotKeysIntoFile()
@@ -138,8 +141,7 @@ func run(hk *HotKey) {
 		<-hk.HotKeyInstance.Keydown()
 		success := resolution.ChangeRes(hk.Width, hk.Height)
 		if success {
-			resolution.WaitRes(2)
-			fmt.Printf("Changed res to: %b-%b", hk.Width, hk.Height)
+			resolution.WaitRes(1)
 		}
 	}
 }

@@ -8,8 +8,8 @@ const props = defineProps<{hotkey: HotKey, refreshHotKeys: () => void}>()
 
 const queryClient = useQueryClient()
 
-const deleteHotKey = () => {
-  DeleteHotKey(props.hotkey.id)
+const deleteHotKey = async () => {
+  await DeleteHotKey(props.hotkey.id)
   props.refreshHotKeys()
   queryClient.invalidateQueries({ queryKey: ['hotKeys'] })
 }
