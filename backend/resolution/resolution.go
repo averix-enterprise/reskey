@@ -8,10 +8,10 @@ func WaitRes(seconds int64) {
 	waitTimestamp = time.Now().UnixMilli() + seconds*1000
 }
 
-func ChangeRes(width uint32, height uint32) {
+func ChangeRes(width uint32, height uint32) bool {
 	if time.Now().UnixMilli() < waitTimestamp {
-		return
+		return false
 	}
-	WaitRes(2)
 	ChangeWindowsRes(width, height)
+	return true
 }

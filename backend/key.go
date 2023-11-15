@@ -136,8 +136,11 @@ func RegisterHotKey(key string, modifiers []string, width uint32, height uint32,
 func run(hk *HotKey) {
 	for hk.Running {
 		<-hk.HotKeyInstance.Keydown()
-		resolution.ChangeRes(hk.Width, hk.Height)
-		fmt.Printf("Changed res to: %b-%b", hk.Width, hk.Height)
+		success := resolution.ChangeRes(hk.Width, hk.Height)
+		if success {
+			resolution.WaitRes(2)
+			fmt.Printf("Changed res to: %b-%b", hk.Width, hk.Height)
+		}
 	}
 }
 
