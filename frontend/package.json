@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/vue-query": "^5.8.3",
+    "@vueuse/core": "^10.6.1",
     "vue": "^3.2.37"
   },
   "devDependencies": {

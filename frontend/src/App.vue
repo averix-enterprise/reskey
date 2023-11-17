@@ -3,6 +3,9 @@ import { useQueryClient } from '@tanstack/vue-query'
 import { AddHotKey } from "../wailsjs/go/backend/App";
 import useQuery from './composables/useQuery'
 import Row from "./components/HotKey/HotKeyRow.vue"
+import {useKeyModifier, useMagicKeys} from "@vueuse/core";
+import {watch} from "vue";
+import {LogInfo} from "../wailsjs/runtime";
 
 const queryClient = useQueryClient()
 
@@ -13,6 +16,12 @@ const addHotKey = async () => {
   await AddHotKey()
   queryClient.invalidateQueries({ queryKey: ['hotKeys'] })
 }
+
+const { current } = useMagicKeys()
+
+watch(current, (e) => {
+  LogInfo(Array.from(e.keys()).join(" "))
+})
 </script>
 
 <template>
