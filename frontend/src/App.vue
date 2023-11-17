@@ -1,21 +1,18 @@
 <script lang="ts" setup>
-import { WindowSetSize } from "../wailsjs/runtime/runtime";
+import { useQueryClient } from '@tanstack/vue-query'
+import { AddHotKey } from "../wailsjs/go/backend/App";
+import useQuery from './composables/useQuery'
 import Row from "./components/HotKey/HotKeyRow.vue"
-import { ref, watch } from "vue";
 
-const rowAmount = ref(1)
+const queryClient = useQueryClient()
 
-const addRow = () => {
-  rowAmount.value++
+const { hotKeys: hotKeysQuery } = useQuery()
+const { data: hotKeys, isLoading: areHotKeysLoading } = hotKeysQuery.all()
+
+const addHotKey = async () => {
+  await AddHotKey()
+  queryClient.invalidateQueries({ queryKey: ['hotKeys'] })
 }
-
-watch(rowAmount, (newValue) => {
-  const baseHeight = 250
-  const windowHeight = baseHeight + (rowAmount.value * 50 )
-  if (windowHeight <= 800) {
-      WindowSetSize(600, windowHeight)
-  }
-})
 </script>
 
 <template>
@@ -25,15 +22,15 @@ watch(rowAmount, (newValue) => {
         <h1 class="text-lg font-bold text-center">
           Res<span class="text-purple-800">Key</span>
         </h1>
-        <button @click="addRow">+</button>
+        <button @click="addHotKey">+</button>
       </div>
       <div>
-        <button @click="rowAmount = 1">Refresh</button>
+        Averix.Tech
       </div>
     </div>
     <hr class="my-3" />
-    <div class="flex flex-col gap-2">
-      <Row v-for="row in rowAmount" />
+    <div v-if="!areHotKeysLoading" class="flex flex-col gap-2">
+      <Row v-for="hotkey in hotKeys" :key="hotkey.id" :hotkey="hotkey" :refresh-hot-keys="() => {}" />
     </div>
   </div>
 </template>
